@@ -6,7 +6,7 @@ const Header = () => {
     <header style={styles.header}>
       <div style={styles.logoContainer}>
         <img
-          src="logo.png"
+          src="image.jpg"
           alt="Library Logo"
           style={styles.logo}
         />
