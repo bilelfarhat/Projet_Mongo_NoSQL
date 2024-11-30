@@ -7,8 +7,9 @@ import AddBookForm from './components/AddBookForm';
 import UpdateBookForm from './components/UpdateBookForm';
 import SubscriberList from './components/SubscriberList';
 import AddSubscriberForm from './components/AddSubscriberForm';
-import LoanList from './components/LoanList';
+import BorrowerList from './components/borrowerList';
 import UpdateSubscriberForm from './components/UpdateSubscriberForm';
+import AddBorrower from './components/AddBorrower';
 
 function App() {
   return (
@@ -22,8 +23,9 @@ function App() {
           <Route path="/update-book/:id" element={<UpdateBookForm />} />
           <Route path="/subscribers" element={<SubscriberList />} />
           <Route path="/add-subscriber" element={<AddSubscriberForm />} />
-          <Route path="/loans" element={<LoanList />} />
+          <Route path="/borrower" element={<BorrowerList />} />
           <Route path="/update-subscriber/:email" element={<UpdateSubscriberForm />} />
+          <Route path="/add-borrower" element={<AddBorrower />} />
         </Routes>
       </div>
     </Router>

@@ -2,18 +2,14 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-const BookList = () => {
-  const [books, setBooks] = useState([]);
-  const [loans, setLoans] = useState([]);
+const BorrowerList = () => {
+  const [borrowers, setBorrowers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/books')
-      .then(res => setBooks(res.data))
-      .catch(err => console.error('Erreur lors de la récupération des livres : ', err));
-
     axios.get('http://localhost:5000/borrowers')
-      .then(res => setLoans(res.data))
+      .then(res => setBorrowers(res.data))
       .catch(err => console.error('Erreur lors de la récupération des emprunteurs : ', err));
   }, []);
 
@@ -21,47 +17,63 @@ const BookList = () => {
     setSearchTerm(e.target.value);
   };
 
-  const filteredBooks = books.filter(book =>
-    book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    book.author.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const handleDelete = async (id) => {
+    const borrowerToDelete = borrowers.find(borrower => borrower._id === id);
 
-  const isBookAvailable = (book) => {
-    return book.quantity > 0;
+    if (borrowerToDelete) {
+      try {
+        setIsLoading(true); // Marquer l'état comme "chargement en cours"
+        await axios.put('http://localhost:5000/books/update-quantity', {
+          book_title: borrowerToDelete.book_title,
+          quantity_change: 0 // Augmenter la quantité de 1
+        });
+
+        await axios.delete(`http://localhost:5000/borrowers/${id}`);
+        setBorrowers(borrowers.filter(borrower => borrower._id !== id));
+      } catch (err) {
+        console.error('Erreur lors de la suppression de l\'emprunteur : ', err);
+      } finally {
+        setIsLoading(false); // Réinitialiser l'état à "non chargé"
+      }
+    }
   };
+
+  const filteredBorrowers = borrowers.filter(borrower =>
+    borrower.subscriber_email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    borrower.book_title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>Liste des Livres</h2>
-      <Link to="/add-book" style={styles.addButton}>Ajouter un livre</Link>
+      <h2 style={styles.title}>Liste des Emprunteurs</h2>
+      <Link to="/add-borrower" style={styles.addButton}>Ajouter un emprunteur</Link>
       <input
         type="text"
-        placeholder="Rechercher par titre ou auteur"
+        placeholder="Rechercher par email ou titre du livre"
         value={searchTerm}
         onChange={handleSearchChange}
         style={styles.searchInput}
       />
-      <div style={styles.bookList}>
-        {filteredBooks.length > 0 ? (
-          filteredBooks.map(book => (
-            <div key={book._id} style={styles.bookItem}>
-              <h3>{book.title}</h3>
-              <p>{book.author}</p>
-              <p>{book.year}</p>
-              <p>Quantité : {book.quantity}</p>
-              <p style={isBookAvailable(book) ? styles.available : styles.unavailable}>
-                {isBookAvailable(book) ? 'Disponible' : 'Indisponible'}
-              </p>
+      <div style={styles.borrowerList}>
+        {filteredBorrowers.length > 0 ? (
+          filteredBorrowers.map(borrower => (
+            <div key={borrower._id} style={styles.borrowerItem}>
+              <h3>{borrower.subscriber_email}</h3>
+              <p>{borrower.book_title}</p>
+              <p>{borrower.borrow_start_date} - {borrower.borrow_end_date}</p>
               <div style={styles.buttonContainer}>
-                <Link to={`/update-book/${book._id}`} state={{ book }} style={styles.editButton}>
-                  Modifier
-                </Link>
-                <button style={styles.deleteButton}>Supprimer</button>
+                <button 
+                  style={styles.deleteButton} 
+                  onClick={() => handleDelete(borrower._id)} 
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Suppression...' : 'Supprimer'}
+                </button>
               </div>
             </div>
           ))
         ) : (
-          <p style={styles.noDataText}>Aucun livre trouvé</p>
+          <p style={styles.noDataText}>Aucun emprunteur trouvé</p>
         )}
       </div>
     </div>
@@ -111,12 +123,12 @@ const styles = {
     outline: 'none',
     transition: 'border-color 0.3s',
   },
-  bookList: {
+  borrowerList: {
     display: 'flex',
     flexDirection: 'column',
     gap: '15px',
   },
-  bookItem: {
+  borrowerItem: {
     padding: '20px',
     backgroundColor: '#f9f9f9',
     borderRadius: '8px',
@@ -126,20 +138,6 @@ const styles = {
     display: 'flex',
     justifyContent: 'flex-end',
     gap: '10px',
-  },
-  editButton: {
-    backgroundColor: '#4CAF50',
-    color: '#fff',
-    padding: '8px 12px',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    fontSize: '14px',
-    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
-    transition: 'background-color 0.3s',
-    textDecoration: 'none',
-    textAlign: 'center',
-    display: 'inline-block',
   },
   deleteButton: {
     backgroundColor: '#f44336',
@@ -157,14 +155,6 @@ const styles = {
     color: '#777',
     fontSize: '16px',
   },
-  available: {
-    color: 'green',
-    fontWeight: 'bold',
-  },
-  unavailable: {
-    color: 'red',
-    fontWeight: 'bold',
-  },
 };
 
-export default BookList;
+export default BorrowerList;

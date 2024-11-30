@@ -6,7 +6,7 @@ const Header = () => {
     <header style={styles.header}>
       <div style={styles.logoContainer}>
         <img
-          src="image.jpg"
+          src="./image.jpg"
           alt="Library Logo"
           style={styles.logo}
         />
@@ -16,7 +16,7 @@ const Header = () => {
         <Link to="/" style={styles.link}>Tableau de bord</Link>
         <Link to="/books" style={styles.link}>Livres</Link>
         <Link to="/subscribers" style={styles.link}>Abonnés</Link>
-        <Link to="/loans" style={styles.link}>Emprunts</Link>
+        <Link to="/borrower" style={styles.link}>Emprunts</Link>
       </nav>
     </header>
   );
@@ -27,39 +27,35 @@ const styles = {
     backgroundColor: '#007bff',
     padding: '10px 20px',
     color: '#fff',
-    position: 'fixed',
-    width: '100%',
-    top: 0,
-    zIndex: 1000,
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
   },
   logoContainer: {
     display: 'flex',
     alignItems: 'center',
-    gap: '10px',
   },
   logo: {
-    width: '40px',
     height: '40px',
-    borderRadius: '50%',
+    marginRight: '10px',
   },
   appName: {
-    fontSize: '20px',
+    fontSize: '24px',
     fontWeight: 'bold',
-    color: '#fff',
   },
   nav: {
     display: 'flex',
-    gap: '20px',
+    gap: '15px',
   },
   link: {
     color: '#fff',
     textDecoration: 'none',
-    fontSize: '18px',
-    fontWeight: 'bold',
+    fontSize: '16px',
+    transition: 'color 0.3s',
+  },
+  linkHover: {
+    color: '#d1eaff',
   },
 };
 
