@@ -67,7 +67,7 @@ const BorrowerList = () => {
                   onClick={() => handleDelete(borrower._id)} 
                   disabled={isLoading}
                 >
-                  {isLoading ? 'Suppression...' : 'Supprimer'}
+                  {isLoading ? 'Suppression...' : 'Enregistrer le retour'}
                 </button>
               </div>
             </div>

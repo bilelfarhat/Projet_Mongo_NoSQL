@@ -1,42 +1,43 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const AddSubscriberForm = () => {
+const AddSubscriber = () => {
+  const [subscriber, setSubscriber] = useState({ name: '', email: '' });
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setSubscriber({ ...subscriber, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage('');
+    setError('');
 
-    const newSubscriber = { name, email };
-
-    // Vérifier si l'email de l'abonné existe déjà
-    axios
-      .get(`http://localhost:5000/subscribers/${email}`)
-      .then((res) => {
-        if (res.data.exists) {
-          alert('Email existe déjà');
-          setEmail('');
-        } else {
-          // Ajouter l'abonné si l'email n'existe pas
-          axios
-            .post('http://localhost:5000/subscribers', newSubscriber)
-            .then((res) => {
-              setName('');
-              setEmail('');
-              navigate('/subscribers'); // Redirection après l'ajout de l'abonné
-            })
-            .catch((error) => {
-              console.error("Erreur lors de l'ajout de l'abonné", error);
-            });
-        }
-      })
-      .catch((error) => {
-        console.error("Erreur lors de la vérification de l'email de l'abonné", error);
+    try {
+      const response = await fetch('http://localhost:5000/subscribers', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(subscriber),
       });
+
+      if (response.ok) {
+        const data = await response.json();
+        setMessage(data.message);
+        setSubscriber({ name: '', email: '' });
+        navigate('/subscribers');
+      } else {
+        const errorData = await response.json();
+        setError(errorData.error || 'Une erreur s\'est produite.');
+      }
+    } catch (err) {
+      setError('Impossible de se connecter au serveur.');
+    }
   };
 
   return (
@@ -44,11 +45,12 @@ const AddSubscriberForm = () => {
       <h2 style={styles.title}>Ajouter un Abonné</h2>
       <form onSubmit={handleSubmit} style={styles.form}>
         <div style={styles.inputGroup}>
-          <label style={styles.label}>Nom :</label>
+          <label style={styles.label}>Nom et Prénom :</label>
           <input
             type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            name="name"
+            value={subscriber.name}
+            onChange={handleChange}
             required
             style={styles.input}
           />
@@ -57,15 +59,17 @@ const AddSubscriberForm = () => {
           <label style={styles.label}>Email :</label>
           <input
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            name="email"
+            value={subscriber.email}
+            onChange={handleChange}
             required
             style={styles.input}
           />
         </div>
-        {errorMessage && <p style={styles.errorText}>{errorMessage}</p>}
         <button type="submit" style={styles.submitButton}>Ajouter</button>
       </form>
+      {message && <p style={styles.successMessage}>{message}</p>}
+      {error && <p style={styles.errorMessage}>{error}</p>}
     </div>
   );
 };
@@ -85,6 +89,8 @@ const styles = {
     textAlign: 'center',
     color: '#333',
     marginBottom: '20px',
+    fontSize: '28px',
+    fontWeight: 'bold',
   },
   form: {
     display: 'flex',
@@ -108,9 +114,6 @@ const styles = {
     outline: 'none',
     transition: 'border-color 0.3s',
   },
-  inputFocus: {
-    borderColor: '#2196F3',
-  },
   submitButton: {
     backgroundColor: '#4CAF50',
     color: '#fff',
@@ -125,11 +128,16 @@ const styles = {
   submitButtonHover: {
     backgroundColor: '#45a049',
   },
-  errorText: {
+  successMessage: {
+    color: 'green',
+    fontSize: '16px',
+    marginTop: '10px',
+  },
+  errorMessage: {
     color: 'red',
-    fontSize: '14px',
-    textAlign: 'center',
+    fontSize: '16px',
+    marginTop: '10px',
   },
 };
 
-export default AddSubscriberForm;
+export default AddSubscriber;

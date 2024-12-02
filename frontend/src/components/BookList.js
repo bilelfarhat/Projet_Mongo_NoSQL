@@ -30,6 +30,26 @@ const BookList = () => {
     return book.quantity > 0;
   };
 
+  const handleDeleteBook = async (bookId) => {
+    if (window.confirm("Êtes-vous sûr de vouloir supprimer ce livre ?")) {
+     
+      axios.delete(`http://localhost:5000/books/${bookId}`)
+      .then((res) => {
+        alert(res.data.message);
+        // Mettre à jour la liste des abonnés après suppression
+        setBooks(books.filter(book => book._id !== bookId));
+      })
+      .catch((err) => {
+        console.error("Erreur lors de la suppression du livre : ", err);
+        alert("Une erreur est survenue lors de la suppression.");
+      });
+    }
+  };
+  
+
+  
+  
+
   return (
     <div style={styles.container}>
       <h2 style={styles.title}>Liste des Livres</h2>
@@ -56,7 +76,13 @@ const BookList = () => {
                 <Link to={`/update-book/${book._id}`} state={{ book }} style={styles.editButton}>
                   Modifier
                 </Link>
-                <button style={styles.deleteButton}>Supprimer</button>
+                <button
+  style={styles.deleteButton}
+  onClick={() => handleDeleteBook(book._id)}
+>
+  Supprimer
+</button>
+
               </div>
             </div>
           ))

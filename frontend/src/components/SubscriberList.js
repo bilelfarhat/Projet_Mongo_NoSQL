@@ -20,6 +20,22 @@ const SubscriberList = () => {
     subscriber.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     subscriber.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  
+  const handleDeleteSubscriber = (email) => {
+    if (window.confirm("Êtes-vous sûr de vouloir supprimer cet abonné ?")) {
+      axios.delete(`http://localhost:5000/subscribers/${email}`)
+        .then((res) => {
+          alert(res.data.message);
+          // Mettre à jour la liste des abonnés après suppression
+          setSubscribers(subscribers.filter(subscriber => subscriber.email !== email));
+        })
+        .catch((err) => {
+          console.error("Erreur lors de la suppression de l'abonné : ", err);
+          alert("Une erreur est survenue lors de la suppression.");
+        });
+    }
+  };
+  
 
   return (
     <div style={styles.container}>
@@ -42,7 +58,13 @@ const SubscriberList = () => {
                 <Link to={`/update-subscriber/${subscriber.email}`} state={{ subscriber }} style={styles.editButton}>
                   Modifier
                 </Link>
-                <button style={styles.deleteButton}>Supprimer</button>
+                <button 
+  style={styles.deleteButton} 
+  onClick={() => handleDeleteSubscriber(subscriber.email)}
+>
+  Supprimer
+</button>
+
               </div>
             </div>
           ))
