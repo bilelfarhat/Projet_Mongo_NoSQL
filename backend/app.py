@@ -19,6 +19,10 @@ def serialize_book(book):
     book['_id'] = str(book['_id'])
     return book
 
+@app.route('/')
+def home():
+    return 'Welcome to the Library API!'    
+
 # Route pour récupérer tous les livres
 @app.route('/books', methods=['GET'])
 def get_books():
