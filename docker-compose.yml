@@ -1,11 +1,9 @@
-version: '3.8'
-
 services:
   backend:
     build:
-      context: .
-      dockerfile: Dockerfile.backend
-    container_name: flask_backend
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: flask
     ports:
       - "5000:5000"
     environment:
@@ -16,9 +14,9 @@ services:
       - app_network
   frontend:
     build:
-      context: .
-      dockerfile: Dockerfile.frontend
-    container_name: react_frontend
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: reactjs
     ports:
       - "3000:3000"
     networks:

@@ -19,7 +19,7 @@ const UpdateSubscriberForm = () => {
     } else {
       // Fetch subscriber details if not passed through state
       axios
-        .get(`http://localhost:5000/subscribers/${email}`)
+        .get(`${process.env.REACT_APP_API_URL}/subscribers/${email}`)
         .then((res) => {
           const subscriber = res.data;
           setName(subscriber.name);
@@ -35,7 +35,7 @@ const UpdateSubscriberForm = () => {
     const updatedSubscriber = { name, email: subscriberEmail };
 
     axios
-      .put(`http://localhost:5000/subscribers/${email}`, updatedSubscriber)
+      .put(`${process.env.REACT_APP_API_URL}/subscribers/${email}`, updatedSubscriber)
       .then((res) => {
         navigate('/subscribers'); // Redirection après la mise à jour de l'abonné
       })

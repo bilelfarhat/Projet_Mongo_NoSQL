@@ -7,7 +7,7 @@ const SubscriberList = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:5000/subscribers')
+    axios.get(`${process.env.REACT_APP_API_URL}/subscribers`)
       .then(res => setSubscribers(res.data))
       .catch(err => console.error('Erreur lors de la récupération des abonnés : ', err));
   }, []);
@@ -23,7 +23,7 @@ const SubscriberList = () => {
   
   const handleDeleteSubscriber = (email) => {
     if (window.confirm("Êtes-vous sûr de vouloir supprimer cet abonné ?")) {
-      axios.delete(`http://localhost:5000/subscribers/${email}`)
+      axios.delete(`${process.env.REACT_APP_API_URL}/subscribers/${email}`)
         .then((res) => {
           alert(res.data.message);
           // Mettre à jour la liste des abonnés après suppression

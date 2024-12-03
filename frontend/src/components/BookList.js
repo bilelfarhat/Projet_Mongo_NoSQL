@@ -8,11 +8,11 @@ const BookList = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:5000/books')
+    axios.get(`${process.env.REACT_APP_API_URL}/books`)
       .then(res => setBooks(res.data))
       .catch(err => console.error('Erreur lors de la récupération des livres : ', err));
 
-    axios.get('http://localhost:5000/borrowers')
+    axios.get(`${process.env.REACT_APP_API_URL}/borrowers`)
       .then(res => setLoans(res.data))
       .catch(err => console.error('Erreur lors de la récupération des emprunteurs : ', err));
   }, []);
@@ -33,7 +33,7 @@ const BookList = () => {
   const handleDeleteBook = async (bookId) => {
     if (window.confirm("Êtes-vous sûr de vouloir supprimer ce livre ?")) {
      
-      axios.delete(`http://localhost:5000/books/${bookId}`)
+      axios.delete(`${process.env.REACT_APP_API_URL}/books/${bookId}`)
       .then((res) => {
         alert(res.data.message);
         // Mettre à jour la liste des abonnés après suppression

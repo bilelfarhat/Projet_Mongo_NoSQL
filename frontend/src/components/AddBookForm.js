@@ -15,7 +15,7 @@ const AddBookForm = () => {
     const newBook = { title, author, year, quantity };
 
     axios
-      .post('http://localhost:5000/books', newBook)
+      .post(`${process.env.REACT_APP_API_URL}/books`, newBook)
       .then((res) => {
         setTitle('');
         setAuthor('');

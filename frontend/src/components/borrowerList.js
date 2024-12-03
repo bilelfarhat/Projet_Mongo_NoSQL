@@ -8,7 +8,7 @@ const BorrowerList = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/borrowers')
+    axios.get(`${process.env.REACT_APP_API_URL}/borrowers`)
       .then(res => setBorrowers(res.data))
       .catch(err => console.error('Erreur lors de la récupération des emprunteurs : ', err));
   }, []);
@@ -23,12 +23,12 @@ const BorrowerList = () => {
     if (borrowerToDelete) {
       try {
         setIsLoading(true); // Marquer l'état comme "chargement en cours"
-        await axios.put('http://localhost:5000/books/update-quantity', {
+        await axios.put(`${process.env.REACT_APP_API_URL}/books/update-quantity`, {
           book_title: borrowerToDelete.book_title,
           quantity_change: 0 // Augmenter la quantité de 1
         });
 
-        await axios.delete(`http://localhost:5000/borrowers/${id}`);
+        await axios.delete(`${process.env.REACT_APP_API_URL}/borrowers/${id}`);
         setBorrowers(borrowers.filter(borrower => borrower._id !== id));
       } catch (err) {
         console.error('Erreur lors de la suppression de l\'emprunteur : ', err);

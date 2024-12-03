@@ -4,10 +4,10 @@ from pymongo import MongoClient
 from bson import ObjectId
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})  # Configurer CORS pour permettre les interactions avec le frontend
+CORS(app, resources={r"/*": {"origins": "*"}})  # Configurer CORS pour permettre les interactions avec le frontend
 
 # Connexion à MongoDB
-client = MongoClient("mongodb://127.0.0.1:27017/")
+client = MongoClient("mongodb://mongo:27017/")
 db = client["library_db"]
 
 # Collections MongoDB
