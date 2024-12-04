@@ -58,7 +58,7 @@ const AddBorrower = () => {
         });
         // Mettre à jour la liste des livres disponibles
         axios
-          .get(`http://localhost:5000/books`)
+          .get(`{process.env.REACT_APP_API_URL}/books`)
           .then((res) => setBooks(res.data))
           .catch((err) => console.error('Erreur chargement livres : ', err));
         navigate('/borrower');
