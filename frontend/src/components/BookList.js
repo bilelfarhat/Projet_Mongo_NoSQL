@@ -8,12 +8,12 @@ const BookList = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/books`)
+    axios.get(`http://34.45.17.172:5000/books`)
     .then(res => setBooks(res.data))
     .catch(err => console.error('Erreur lors de la récupération des livres : ', err));
-    console.log(`${process.env.REACT_APP_API_URL}`)
+    
 
-    axios.get(`${process.env.REACT_APP_API_URL}/borrowers`)
+    axios.get(`http://34.45.17.172:5000/borrowers`)
       .then(res => setBorrowers(res.data))
       .catch(err => console.error('Erreur lors de la récupération des emprunteurs : ', err));
   }, []);
@@ -35,7 +35,7 @@ const BookList = () => {
     if (window.confirm("Êtes-vous sûr de vouloir supprimer ce livre ?")) {
      
 
-      axios.delete(`${process.env.REACT_APP_API_URL}/books/${bookId}`)
+      axios.delete(`setBorrowers/books/${bookId}`)
       
       .then((res) => {
         alert(res.data.message);

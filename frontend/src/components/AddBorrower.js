@@ -12,23 +12,23 @@ const AddBorrower = () => {
   });
   const [books, setBooks] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
-  const [borrowers, setBorrowers] = useState([]);
+  const [loans, setLoans] = useState([]);
   const [message, setMessage] = useState('');
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/books`)
+      .get(`http://34.45.17.172:5000/books`)
       .then((res) => setBooks(res.data))
       .catch((err) => console.error('Erreur chargement livres : ', err));
 
     axios
-      .get(`${process.env.REACT_APP_API_URL}/subscribers`)
+      .get(`http://34.45.17.172:5000/subscribers`)
       .then((res) => setSubscribers(res.data))
       .catch((err) => console.error('Erreur chargement abonnés : ', err));
 
     axios
-      .get(`${process.env.REACT_APP_API_URL}/borrowers`)
-      .then((res) => setBorrowers(res.data))
+      .get(`http://34.45.17.172:5000/borrowers`)
+      .then((res) => setLoans(res.data))
       .catch((err) => console.error('Erreur chargement emprunts : ', err));
   }, []);
 
@@ -47,7 +47,7 @@ const AddBorrower = () => {
     }
 
     axios
-      .post(`${process.env.REACT_APP_API_URL}/borrowers`, borrower)
+      .post(`http://34.45.17.172:5000/borrowers`, borrower)
       .then((res) => {
         setMessage(res.data.message);
         setBorrower({
@@ -58,7 +58,7 @@ const AddBorrower = () => {
         });
         // Mettre à jour la liste des livres disponibles
         axios
-          .get(`{process.env.REACT_APP_API_URL}/books`)
+          .get(`http://34.45.17.172:5000/books`)
           .then((res) => setBooks(res.data))
           .catch((err) => console.error('Erreur chargement livres : ', err));
         navigate('/borrower');
@@ -67,7 +67,7 @@ const AddBorrower = () => {
   };
 
   const isBookBorrowed = (bookTitle) => {
-    return borrowers.some(borrower => borrower.book_title === bookTitle);
+    return loans.some(loan => loan.book_title === bookTitle);
   };
 
   const availableBooks = books.filter(book => book.quantity > 0 && !isBookBorrowed(book.title));
