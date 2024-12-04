@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const BookList = () => {
   const [books, setBooks] = useState([]);
-  const [loans, setLoans] = useState([]);
+  const [borrowers, setBorrowers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
@@ -14,7 +14,7 @@ const BookList = () => {
     console.log(`${process.env.REACT_APP_API_URL}`)
 
     axios.get(`${process.env.REACT_APP_API_URL}/borrowers`)
-      .then(res => setLoans(res.data))
+      .then(res => setBorrowers(res.data))
       .catch(err => console.error('Erreur lors de la récupération des emprunteurs : ', err));
   }, []);
 

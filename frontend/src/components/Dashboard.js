@@ -5,7 +5,7 @@ import axios from 'axios';
 const Dashboard = () => {
   const [books, setBooks] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
-  const [loans, setLoans] = useState([]);
+  const [borrowers, setBorrowers] = useState([]);
 
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/books`)
@@ -16,8 +16,8 @@ const Dashboard = () => {
       .then(res => setSubscribers(res.data))
       .catch(err => console.error('Erreur lors de la récupération des abonnés : ', err));
 
-    axios.get(`${process.env.REACT_APP_API_URL}/loans`)
-      .then(res => setLoans(res.data))
+    axios.get(`${process.env.REACT_APP_API_URL}/borrowers`)
+      .then(res => setBorrowers(res.data))
       .catch(err => console.error('Erreur lors de la récupération des emprunts : ', err));
   }, []);
 
@@ -37,8 +37,8 @@ const Dashboard = () => {
         </div>
         <div style={styles.stat}>
           <h3>Emprunts</h3>
-          <p>{loans.length}</p>
-          <Link to="/loans" style={styles.link}>Voir les emprunts</Link>
+          <p>{borrowers.length}</p>
+          <Link to="/borrowers" style={styles.link}>Voir les emprunts</Link>
         </div>
       </div>
       <div style={styles.buttonsContainer}>

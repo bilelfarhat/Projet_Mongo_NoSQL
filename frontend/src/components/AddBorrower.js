@@ -12,7 +12,7 @@ const AddBorrower = () => {
   });
   const [books, setBooks] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
-  const [loans, setLoans] = useState([]);
+  const [borrowers, setBorrowers] = useState([]);
   const [message, setMessage] = useState('');
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const AddBorrower = () => {
 
     axios
       .get(`${process.env.REACT_APP_API_URL}/borrowers`)
-      .then((res) => setLoans(res.data))
+      .then((res) => setBorrowers(res.data))
       .catch((err) => console.error('Erreur chargement emprunts : ', err));
   }, []);
 
@@ -67,7 +67,7 @@ const AddBorrower = () => {
   };
 
   const isBookBorrowed = (bookTitle) => {
-    return loans.some(loan => loan.book_title === bookTitle);
+    return borrowers.some(borrower => borrower.book_title === bookTitle);
   };
 
   const availableBooks = books.filter(book => book.quantity > 0 && !isBookBorrowed(book.title));
