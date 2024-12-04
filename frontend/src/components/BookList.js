@@ -9,8 +9,9 @@ const BookList = () => {
 
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/books`)
-      .then(res => setBooks(res.data))
-      .catch(err => console.error('Erreur lors de la récupération des livres : ', err));
+    .then(res => setBooks(res.data))
+    .catch(err => console.error('Erreur lors de la récupération des livres : ', err));
+    console.log(`${process.env.REACT_APP_API_URL}`)
 
     axios.get(`${process.env.REACT_APP_API_URL}/borrowers`)
       .then(res => setLoans(res.data))
@@ -33,7 +34,9 @@ const BookList = () => {
   const handleDeleteBook = async (bookId) => {
     if (window.confirm("Êtes-vous sûr de vouloir supprimer ce livre ?")) {
      
+
       axios.delete(`${process.env.REACT_APP_API_URL}/books/${bookId}`)
+      
       .then((res) => {
         alert(res.data.message);
         // Mettre à jour la liste des abonnés après suppression
