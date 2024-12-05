@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 const BorrowerList = () => {
   const [borrowers, setBorrowers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     axios.get(`http://localhost:5000/borrowers`)
@@ -22,18 +21,17 @@ const BorrowerList = () => {
 
     if (borrowerToDelete) {
       try {
-        setIsLoading(true); // Marquer l'état comme "chargement en cours"
+        // Mettre à jour la quantité du livre emprunté avant de supprimer l'emprunteur
         await axios.put(`http://localhost:5000/books/update-quantity`, {
           book_title: borrowerToDelete.book_title,
-          quantity_change: 0 // Augmenter la quantité de 1
+          quantity_change: 1 // Augmenter la quantité de 1 (retour du livre)
         });
 
+        // Supprimer l'emprunteur
         await axios.delete(`http://localhost:5000/borrowers/${id}`);
         setBorrowers(borrowers.filter(borrower => borrower._id !== id));
       } catch (err) {
         console.error('Erreur lors de la suppression de l\'emprunteur : ', err);
-      } finally {
-        setIsLoading(false); // Réinitialiser l'état à "non chargé"
       }
     }
   };
@@ -64,10 +62,9 @@ const BorrowerList = () => {
               <div style={styles.buttonContainer}>
                 <button 
                   style={styles.deleteButton} 
-                  onClick={() => handleDelete(borrower._id)} 
-                  disabled={isLoading}
+                  onClick={() => handleDelete(borrower._id)}
                 >
-                  {isLoading ? 'Suppression...' : 'Enregistrer le retour'}
+                  Enregistrer le retour
                 </button>
               </div>
             </div>

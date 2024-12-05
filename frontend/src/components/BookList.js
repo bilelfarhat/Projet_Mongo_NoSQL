@@ -24,7 +24,9 @@ const BookList = () => {
 
   const filteredBooks = books.filter(book =>
     book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    book.author.toLowerCase().includes(searchTerm.toLowerCase())
+    book.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    book.year.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+    book.quantity.toString().toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const isBookAvailable = (book) => {
@@ -35,7 +37,8 @@ const BookList = () => {
     if (window.confirm("Êtes-vous sûr de vouloir supprimer ce livre ?")) {
      
 
-      axios.delete(`setBorrowers/books/${bookId}`)
+      axios.delete(`http://localhost:5000/books/${bookId}`)
+      //${process.env.REACT_APP_API_URL}
       
       .then((res) => {
         alert(res.data.message);
