@@ -7,7 +7,7 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})  # Configurer CORS pour permettre les interactions avec le frontend
 
 # Connexion à MongoDB
-client = MongoClient("mongodb://localhost:27017/")
+client = MongoClient("mongodb://mongo:27017/")
 db = client["library-db"]
 
 # Collections MongoDB
