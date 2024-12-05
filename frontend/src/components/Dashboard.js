@@ -8,15 +8,15 @@ const Dashboard = () => {
   const [borrowers, setBorrowers] = useState([]);
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/books`)
+    axios.get(`${process.env.REACT_APP_API_URL}/books`)
       .then(res => setBooks(res.data))
       .catch(err => console.error('Erreur lors de la récupération des livres : ', err));
 
-    axios.get(`http://localhost:5000/subscribers`)
+    axios.get(`${process.env.REACT_APP_API_URL}/subscribers`)
       .then(res => setSubscribers(res.data))
       .catch(err => console.error('Erreur lors de la récupération des abonnés : ', err));
 
-    axios.get(`http://localhost:5000/borrowers`)
+    axios.get(`${process.env.REACT_APP_API_URL}/borrowers`)
       .then(res => setBorrowers(res.data))
       .catch(err => console.error('Erreur lors de la récupération des emprunts : ', err));
   }, []);

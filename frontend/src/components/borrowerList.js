@@ -7,7 +7,7 @@ const BorrowerList = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/borrowers`)
+    axios.get(`${process.env.REACT_APP_API_URL}/borrowers`)
       .then(res => setBorrowers(res.data))
       .catch(err => console.error('Erreur lors de la récupération des emprunteurs : ', err));
   }, []);
@@ -22,13 +22,13 @@ const BorrowerList = () => {
     if (borrowerToDelete) {
       try {
         // Mettre à jour la quantité du livre emprunté avant de supprimer l'emprunteur
-        await axios.put(`http://localhost:5000/books/update-quantity`, {
+        await axios.put(`${process.env.REACT_APP_API_URL}/books/update-quantity`, {
           book_title: borrowerToDelete.book_title,
           quantity_change: 1 // Augmenter la quantité de 1 (retour du livre)
         });
 
         // Supprimer l'emprunteur
-        await axios.delete(`http://localhost:5000/borrowers/${id}`);
+        await axios.delete(`${process.env.REACT_APP_API_URL}/borrowers/${id}`);
         setBorrowers(borrowers.filter(borrower => borrower._id !== id));
       } catch (err) {
         console.error('Erreur lors de la suppression de l\'emprunteur : ', err);
