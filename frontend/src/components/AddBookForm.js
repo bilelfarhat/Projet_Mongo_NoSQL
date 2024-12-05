@@ -7,23 +7,36 @@ const AddBookForm = () => {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [year, setYear] = useState('');
-  const [quantity, setQuantity] = useState(''); // Ajout de l'état pour la quantité
+  const [quantity, setQuantity] = useState('');
+  const [errorMessage, setErrorMessage] = useState(''); // Gestion des erreurs
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const newBook = { title, author, year, quantity };
+    if (!title || !author || isNaN(year) || isNaN(quantity)) {
+      setErrorMessage("Veuillez remplir tous les champs correctement.");
+      return;
+    }
+
+    const newBook = {
+      title,
+      author,
+      year: parseInt(year, 10), // Conversion de year en entier
+      quantity: parseInt(quantity, 10), // Conversion de quantity en entier
+    };
 
     axios
-      .post(`${process.env.REACT_APP_API_URL}/books`, newBook)
+      .post(`http://localhost:5000/books`, newBook)
       .then((res) => {
         setTitle('');
         setAuthor('');
         setYear('');
-        setQuantity(''); // Réinitialiser la quantité
+        setQuantity('');
+        setErrorMessage(''); // Réinitialiser les erreurs
         navigate('/books'); // Redirection après l'ajout du livre
       })
       .catch((error) => {
+        setErrorMessage(error.response?.data?.error || "Une erreur s'est produite.");
         console.error("Erreur lors de l'ajout du livre", error);
       });
   };
@@ -31,6 +44,7 @@ const AddBookForm = () => {
   return (
     <div style={styles.container}>
       <h2 style={styles.title}>Ajouter un Livre</h2>
+      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
       <form onSubmit={handleSubmit} style={styles.form}>
         <div style={styles.inputGroup}>
           <label style={styles.label}>Titre :</label>
@@ -78,7 +92,6 @@ const AddBookForm = () => {
   );
 };
 
-// Styles modernisés
 const styles = {
   container: {
     maxWidth: '600px',
@@ -126,9 +139,6 @@ const styles = {
     fontSize: '16px',
     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
     transition: 'background-color 0.3s',
-  },
-  submitButtonHover: {
-    backgroundColor: '#45a049',
   },
 };
 

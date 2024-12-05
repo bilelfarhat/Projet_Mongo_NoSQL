@@ -17,17 +17,17 @@ const AddBorrower = () => {
 
   useEffect(() => {
     axios
-      .get(`http://34.45.17.172:5000/books`)
+      .get(`http://localhost:5000/books`)
       .then((res) => setBooks(res.data))
       .catch((err) => console.error('Erreur chargement livres : ', err));
 
     axios
-      .get(`http://34.45.17.172:5000/subscribers`)
+      .get(`http://localhost:5000/subscribers`)
       .then((res) => setSubscribers(res.data))
       .catch((err) => console.error('Erreur chargement abonnés : ', err));
 
     axios
-      .get(`http://34.45.17.172:5000/borrowers`)
+      .get(`http://localhost:5000/borrowers`)
       .then((res) => setLoans(res.data))
       .catch((err) => console.error('Erreur chargement emprunts : ', err));
   }, []);
@@ -47,7 +47,7 @@ const AddBorrower = () => {
     }
 
     axios
-      .post(`http://34.45.17.172:5000/borrowers`, borrower)
+      .post(`http://localhost:5000/borrowers`, borrower)
       .then((res) => {
         setMessage(res.data.message);
         setBorrower({
@@ -58,7 +58,7 @@ const AddBorrower = () => {
         });
         // Mettre à jour la liste des livres disponibles
         axios
-          .get(`http://34.45.17.172:5000/books`)
+          .get(`http://localhost:5000/books`)
           .then((res) => setBooks(res.data))
           .catch((err) => console.error('Erreur chargement livres : ', err));
         navigate('/borrower');

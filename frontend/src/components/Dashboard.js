@@ -8,15 +8,15 @@ const Dashboard = () => {
   const [borrowers, setBorrowers] = useState([]);
 
   useEffect(() => {
-    axios.get(`http://34.45.17.172:5000/books`)
+    axios.get(`http://localhost:5000/books`)
       .then(res => setBooks(res.data))
       .catch(err => console.error('Erreur lors de la récupération des livres : ', err));
 
-    axios.get(`http://34.45.17.172:5000/subscribers`)
+    axios.get(`http://localhost:5000/subscribers`)
       .then(res => setSubscribers(res.data))
       .catch(err => console.error('Erreur lors de la récupération des abonnés : ', err));
 
-    axios.get(`http://34.45.17.172:5000/borrowers`)
+    axios.get(`http://localhost:5000/borrowers`)
       .then(res => setBorrowers(res.data))
       .catch(err => console.error('Erreur lors de la récupération des emprunts : ', err));
   }, []);
@@ -38,7 +38,7 @@ const Dashboard = () => {
         <div style={styles.stat}>
           <h3>Emprunts</h3>
           <p>{borrowers.length}</p>
-          <Link to="/borrowers" style={styles.link}>Voir les emprunts</Link>
+          <Link to="/borrower" style={styles.link}>Voir les emprunts</Link>
         </div>
       </div>
       <div style={styles.buttonsContainer}>

@@ -7,8 +7,8 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})  # Configurer CORS pour permettre les interactions avec le frontend
 
 # Connexion à MongoDB
-client = MongoClient("mongodb://mongo:27017/")
-db = client["library_db"]
+client = MongoClient("mongodb://localhost:27017/")
+db = client["library-db"]
 
 # Collections MongoDB
 books_collection = db["books"]  # Livres
@@ -44,20 +44,38 @@ def get_book(book_id):
 
 
 
-# Route pour ajouter un livre
 @app.route('/books', methods=['POST'])
 def add_book():
     data = request.json
-    if "title" not in data or "author" not in data or "year" not in data or "quantity" not in data:
-        return jsonify({"error": "Invalid input, 'title', 'author', 'year', and 'quantity' are required."}), 400
 
-    # Vérifier si le livre existe déjà
+    # Vérification des champs requis
+    required_fields = ["title", "author", "year", "quantity"]
+    for field in required_fields:
+        if field not in data:
+            return jsonify({"error": f"'{field}' is required."}), 400
+
+    # Vérification du type des champs
+    if not isinstance(data['title'], str):
+        return jsonify({"error": "'title' must be a string."}), 400
+
+    if not isinstance(data['author'], str):
+        return jsonify({"error": "'author' must be a string."}), 400
+
+    if not isinstance(data['year'], int):
+        return jsonify({"error": "'year' must be an integer."}), 400
+
+    if not isinstance(data['quantity'], int):
+        return jsonify({"error": "'quantity' must be an integer."}), 400
+
+    # Vérification si le livre existe déjà
     existing_book = books_collection.find_one({"title": data["title"], "author": data["author"]})
     if existing_book:
         return jsonify({"error": "Book with this title and author already exists."}), 409
 
+    # Insertion du livre
     books_collection.insert_one(data)
     return jsonify({"message": "Book added successfully"}), 201
+
 
 # Route pour mettre à jour un livre
 @app.route('/books/<book_id>', methods=['PUT'])

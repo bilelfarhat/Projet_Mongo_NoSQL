@@ -23,17 +23,19 @@ services:
       - app_network
     depends_on:
       - backend
-  mongo:
+  mongodb:
     image: mongo:latest
-    container_name: mongo_db
+    container_name: mongodb
     ports:
       - "27017:27017"
     volumes:
-      - mongo_data:/data/db
+      - mongodb_data:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
     networks:
-      - app_network
+      - mongo_network
+
 networks:
-  app_network:
+  mongo_network:
     driver: bridge
 
 volumes:

@@ -22,7 +22,7 @@ const UpdateBookForm = () => {
     } else {
       // Si pas de données passées, récupérer depuis l'API
       axios
-        .get(`${process.env.REACT_APP_API_URL}/books/${id}`)
+        .get(`http://localhost:5000/books/${id}`)
         .then((res) => {
           const book = res.data;
           setTitle(book.title);
@@ -40,7 +40,7 @@ const UpdateBookForm = () => {
     const updatedBook = { title, author, year, quantity };
 
     axios
-      .put(`${process.env.REACT_APP_API_URL}/books/${id}`, updatedBook)
+      .put(`http://localhost:5000/books/${id}`, updatedBook)
       .then((res) => {
         navigate('/books'); // Redirection après la mise à jour du livre
       })
