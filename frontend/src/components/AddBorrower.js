@@ -21,13 +21,13 @@ const AddBorrower = () => {
   useEffect(() => {
     // Charger les livres depuis l'API
     axios
-      .get("${process.env.REACT_APP_API_URL}/books")
+      .get(`${process.env.REACT_APP_API_URL}/books`)
       .then((res) => setBooks(res.data))
       .catch((err) => console.error("Erreur lors du chargement des livres :", err));
 
     // Charger les abonnés depuis l'API
     axios
-      .get("${process.env.REACT_APP_API_URL}/subscribers")
+      .get(`${process.env.REACT_APP_API_URL}/subscribers`)
       .then((res) => setSubscribers(res.data))
       .catch((err) => console.error("Erreur lors du chargement des abonnés :", err));
   }, []);
@@ -69,7 +69,7 @@ const AddBorrower = () => {
     }
 
     axios
-      .post("${process.env.REACT_APP_API_URL}/borrowers", borrower)
+      .post(`${process.env.REACT_APP_API_URL}/borrowers`, borrower)
       .then((res) => {
         setMessage(res.data.message);
         setBorrower({
